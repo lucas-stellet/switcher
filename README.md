@@ -66,9 +66,9 @@ switcher list
 
 ```
   deepseek       - DeepSeek [deepseek-chat]  (no api key)
-  moonshot       - Moonshot AI - Kimi K2 [kimi-k2-0711]  (no api key)
+  moonshot       - Moonshot AI [kimi-k2.5]  (no api key)
   openrouter     - OpenRouter  (no api key)
-  zai          - ZhipuAI - GLM 4 [glm-4]  (no api key)
+  zai            - ZhipuAI [glm-5]  (no api key)
 ```
 
 ### Add a provider
@@ -111,10 +111,10 @@ Example:
 {
   "providers": {
     "moonshot": {
-      "description": "Moonshot AI - Kimi K2",
+      "description": "Moonshot AI",
       "base_url": "https://api.moonshot.cn/v1",
       "api_key": "sk-...",
-      "model": "kimi-k2-0711",
+      "model": "kimi-k2.5",
       "env": {}
     }
   }
@@ -123,12 +123,12 @@ Example:
 
 ## Default providers
 
-| Name         | Provider            | Model           |
-|--------------|---------------------|-----------------|
-| `moonshot`   | Moonshot AI         | kimi-k2-0711    |
-| `zai`      | ZhipuAI             | glm-4           |
-| `openrouter` | OpenRouter          | (user's choice) |
-| `deepseek`   | DeepSeek            | deepseek-chat   |
+| Name         | Provider            | Model             | Notes                                                              |
+|--------------|---------------------|-------------------|--------------------------------------------------------------------|
+| `moonshot`   | Moonshot AI         | `kimi-k2.5`      | 1T MoE, 32B active params, multimodal vision, agentic subagents    |
+| `zai`        | ZhipuAI (Z.AI)     | `glm-5`          | 744B MoE, 40B active params, open-source, trained on Huawei Ascend |
+| `openrouter` | OpenRouter          | (user's choice)   | Gateway to 400+ models from all major providers                    |
+| `deepseek`   | DeepSeek            | `deepseek-chat`   | Points to latest stable (currently V4), strong reasoning & coding  |
 
 ## How it works
 

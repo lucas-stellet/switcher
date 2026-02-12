@@ -31,17 +31,17 @@ func defaultConfig() Config {
 	return Config{
 		Providers: map[string]Provider{
 			"moonshot": {
-				Description: "Moonshot AI - Kimi K2",
+				Description: "Moonshot AI",
 				BaseURL:     "https://api.moonshot.cn/v1",
 				APIKey:      "",
-				Model:       "kimi-k2-0711",
+				Model:       "kimi-k2.5",
 				Env:         map[string]string{},
 			},
 			"zai": {
-				Description: "ZhipuAI - GLM 4",
+				Description: "ZhipuAI",
 				BaseURL:     "https://open.bigmodel.cn/api/paas/v4",
 				APIKey:      "",
-				Model:       "glm-4",
+				Model:       "glm-5",
 				Env:         map[string]string{},
 			},
 			"openrouter": {
