@@ -24,7 +24,7 @@ func configPath() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("cannot determine home directory: %w", err)
 	}
-	return filepath.Join(home, ".switch.json"), nil
+	return filepath.Join(home, ".switcher.json"), nil
 }
 
 func defaultConfig() Config {

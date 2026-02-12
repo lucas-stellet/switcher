@@ -25,17 +25,17 @@ func Run(args []string) error {
 		return cmdList()
 	case "add":
 		if len(args) < 2 {
-			return fmt.Errorf("usage: switch add <name>")
+			return fmt.Errorf("usage: switcher add <name>")
 		}
 		return cmdAdd(args[1])
 	case "remove", "rm":
 		if len(args) < 2 {
-			return fmt.Errorf("usage: switch remove <name>")
+			return fmt.Errorf("usage: switcher remove <name>")
 		}
 		return cmdRemove(args[1])
 	case "edit":
 		if len(args) < 2 {
-			return fmt.Errorf("usage: switch edit <name>")
+			return fmt.Errorf("usage: switcher edit <name>")
 		}
 		return cmdEdit(args[1])
 	case "help", "--help", "-h":
@@ -47,19 +47,19 @@ func Run(args []string) error {
 }
 
 func printUsage() {
-	fmt.Print(`switch - launch Claude Code with different AI providers
+	fmt.Print(`switcher - launch Claude Code with different AI providers
 
 Usage:
-  switch <provider> claude [args...]    Launch Claude with a provider
-  switch list                           List configured providers
-  switch add <name>                     Add a provider interactively
-  switch remove <name>                  Remove a provider
-  switch edit <name>                    Edit a provider in $EDITOR
+  switcher <provider> claude [args...]   Launch Claude with a provider
+  switcher list                          List configured providers
+  switcher add <name>                    Add a provider interactively
+  switcher remove <name>                 Remove a provider
+  switcher edit <name>                   Edit a provider in $EDITOR
 
 Examples:
-  switch moonshot claude --dangerously-skip-permissions
-  switch zhipu claude -p "hello world"
-  switch openrouter claude
+  switcher moonshot claude --dangerously-skip-permissions
+  switcher zhipu claude -p "hello world"
+  switcher openrouter claude
 `)
 }
 
@@ -71,7 +71,7 @@ func cmdList() error {
 
 	providers := cfg.List()
 	if len(providers) == 0 {
-		fmt.Println("No providers configured. Use 'switch add <name>' to add one.")
+		fmt.Println("No providers configured. Use 'switcher add <name>' to add one.")
 		return nil
 	}
 
@@ -108,7 +108,7 @@ func cmdAdd(name string) error {
 	}
 
 	if _, exists := cfg.Get(name); exists {
-		return fmt.Errorf("provider %q already exists. Use 'switch edit %s' to modify it", name, name)
+		return fmt.Errorf("provider %q already exists. Use 'switcher edit %s' to modify it", name, name)
 	}
 
 	reader := bufio.NewReader(os.Stdin)
@@ -172,7 +172,7 @@ func cmdEdit(name string) error {
 	}
 
 	tmpDir := os.TempDir()
-	tmpFile := filepath.Join(tmpDir, fmt.Sprintf("switch-%s.json", name))
+	tmpFile := filepath.Join(tmpDir, fmt.Sprintf("switcher-%s.json", name))
 	if err := os.WriteFile(tmpFile, data, 0600); err != nil {
 		return fmt.Errorf("writing temp file: %w", err)
 	}
@@ -183,7 +183,9 @@ func cmdEdit(name string) error {
 		editor = "vi"
 	}
 
-	cmd := exec.Command(editor, tmpFile)
+	parts := strings.Fields(editor)
+	cmdArgs := append(parts[1:], tmpFile)
+	cmd := exec.Command(parts[0], cmdArgs...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -220,11 +222,11 @@ func cmdRun(args []string) error {
 
 	p, ok := cfg.Get(providerName)
 	if !ok {
-		return fmt.Errorf("unknown provider %q. Use 'switch list' to see available providers", providerName)
+		return fmt.Errorf("unknown provider %q. Use 'switcher list' to see available providers", providerName)
 	}
 
 	if p.APIKey == "" {
-		return fmt.Errorf("provider %q has no API key configured. Use 'switch edit %s' to set one", providerName, providerName)
+		return fmt.Errorf("provider %q has no API key configured. Use 'switcher edit %s' to set one", providerName, providerName)
 	}
 
 	// Skip "claude" if it's the second argument
