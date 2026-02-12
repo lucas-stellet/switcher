@@ -36,19 +36,3 @@ changelog:
       - '^test:'
       - '^chore:'
 
-brews:
-  - name: switcher
-    description: "Launch Claude Code with different AI providers"
-    homepage: "https://github.com/lucas-stellet/switcher"
-    license: "MIT"
-    repository:
-      owner: lucas-stellet
-      name: homebrew-switcher
-    directory: Formula
-    commit_author:
-      name: lucas-stellet
-      email: lustepe@gmail.com
-    install: |
-      bin.install "switcher"
-    test: |
-      system "#{bin}/switcher", "--help"
