@@ -10,8 +10,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/lucas/switch/internal/config"
-	"github.com/lucas/switch/internal/runner"
+	"github.com/lucas-stellet/switcher/internal/config"
+	"github.com/lucas-stellet/switcher/internal/runner"
 )
 
 func Run(args []string) error {

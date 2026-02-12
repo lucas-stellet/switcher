@@ -1,3 +1,3 @@
-module github.com/lucas/switch
+module github.com/lucas-stellet/switcher
 
 go 1.23.1

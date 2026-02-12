@@ -1,2 +1,12 @@
-switch
+# Binary
 switcher
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Claude Code
+.spec-workflow/

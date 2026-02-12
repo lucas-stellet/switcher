@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"syscall"
 
-	"github.com/lucas/switch/internal/config"
+	"github.com/lucas-stellet/switcher/internal/config"
 )
 
 func Run(provider config.Provider, claudeArgs []string) error {
