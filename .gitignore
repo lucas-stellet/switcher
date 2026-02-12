@@ -9,4 +9,5 @@ switcher
 .DS_Store
 
 # Claude Code
+.claude/
 .spec-workflow/
