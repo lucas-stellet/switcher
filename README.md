@@ -16,6 +16,12 @@ This project was inspired by the growing ecosystem of AI providers offering API 
 
 ## Install
 
+### Quick install
+
+```sh
+curl -sSL https://raw.githubusercontent.com/lucas-stellet/switcher/main/install.sh | sh
+```
+
 ### Homebrew
 
 ```sh
