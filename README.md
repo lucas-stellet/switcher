@@ -68,7 +68,7 @@ switcher list
   deepseek       - DeepSeek [deepseek-chat]  (no api key)
   moonshot       - Moonshot AI - Kimi K2 [kimi-k2-0711]  (no api key)
   openrouter     - OpenRouter  (no api key)
-  zhipu          - ZhipuAI - GLM 4 [glm-4]  (no api key)
+  zai          - ZhipuAI - GLM 4 [glm-4]  (no api key)
 ```
 
 ### Add a provider
@@ -126,7 +126,7 @@ Example:
 | Name         | Provider            | Model           |
 |--------------|---------------------|-----------------|
 | `moonshot`   | Moonshot AI         | kimi-k2-0711    |
-| `zhipu`      | ZhipuAI             | glm-4           |
+| `zai`      | ZhipuAI             | glm-4           |
 | `openrouter` | OpenRouter          | (user's choice) |
 | `deepseek`   | DeepSeek            | deepseek-chat   |
 

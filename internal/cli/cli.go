@@ -58,7 +58,7 @@ Usage:
 
 Examples:
   switcher moonshot claude --dangerously-skip-permissions
-  switcher zhipu claude -p "hello world"
+  switcher zai claude -p "hello world"
   switcher openrouter claude
 `)
 }

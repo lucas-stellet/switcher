@@ -37,7 +37,7 @@ func defaultConfig() Config {
 				Model:       "kimi-k2-0711",
 				Env:         map[string]string{},
 			},
-			"zhipu": {
+			"zai": {
 				Description: "ZhipuAI - GLM 4",
 				BaseURL:     "https://open.bigmodel.cn/api/paas/v4",
 				APIKey:      "",
