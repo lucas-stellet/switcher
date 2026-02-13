@@ -178,10 +178,7 @@ func cmdEdit(name string) error {
 	}
 	defer os.Remove(tmpFile)
 
-	editor := os.Getenv("EDITOR")
-	if editor == "" {
-		editor = "vi"
-	}
+	editor := defaultEditor()
 
 	parts := strings.Fields(editor)
 	cmdArgs := append(parts[1:], tmpFile)

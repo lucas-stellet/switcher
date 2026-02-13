@@ -3,14 +3,12 @@ package runner
 import (
 	"fmt"
 	"os"
-	"os/exec"
-	"syscall"
 
 	"github.com/lucas-stellet/switcher/internal/config"
 )
 
 func Run(provider config.Provider, claudeArgs []string) error {
-	claudePath, err := exec.LookPath("claude")
+	claudePath, err := lookClaude()
 	if err != nil {
 		return fmt.Errorf("claude not found in PATH: %w", err)
 	}
@@ -29,7 +27,7 @@ func Run(provider config.Provider, claudeArgs []string) error {
 	}
 	args = append(args, claudeArgs...)
 
-	return syscall.Exec(claudePath, args, env)
+	return execClaude(claudePath, args, env)
 }
 
 func removeEnv(env []string, key string) []string {

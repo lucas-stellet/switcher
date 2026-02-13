@@ -16,10 +16,16 @@ This project was inspired by the growing ecosystem of AI providers offering API 
 
 ## Install
 
-### Quick install
+### Quick install (macOS / Linux)
 
 ```sh
 curl -sSL https://raw.githubusercontent.com/lucas-stellet/switcher/main/install.sh | sh
+```
+
+### Quick install (Windows PowerShell)
+
+```powershell
+irm https://raw.githubusercontent.com/lucas-stellet/switcher/main/install.ps1 | iex
 ```
 
 ### Homebrew
@@ -132,7 +138,7 @@ Example:
 
 ## How it works
 
-switcher finds the `claude` binary in your PATH, sets `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` to point at your chosen provider, and calls `exec` — replacing itself with the Claude process. No wrapper overhead, no subprocess.
+switcher finds the `claude` binary in your PATH, sets `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` to point at your chosen provider, and launches Claude. On macOS/Linux it calls `exec` — replacing itself with the Claude process with zero overhead. On Windows it runs Claude as a subprocess.
 
 ## License
 
