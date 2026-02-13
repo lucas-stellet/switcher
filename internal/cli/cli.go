@@ -310,7 +310,33 @@ func cmdRun(args []string) error {
 		claudeArgs = claudeArgs[1:]
 	}
 
+	printLaunchInfo(providerName, p)
+
 	return runner.Run(p, claudeArgs)
+}
+
+func printLaunchInfo(name string, p config.Provider) {
+	fmt.Fprintf(os.Stderr, "Launching %s...\n", name)
+	if p.Model != "" {
+		fmt.Fprintf(os.Stderr, "  Model:   %s\n", p.Model)
+	}
+
+	aliases := []struct {
+		label string
+		key   string
+	}{
+		{"Opus", "ANTHROPIC_DEFAULT_OPUS_MODEL"},
+		{"Sonnet", "ANTHROPIC_DEFAULT_SONNET_MODEL"},
+		{"Haiku", "ANTHROPIC_DEFAULT_HAIKU_MODEL"},
+	}
+
+	for _, a := range aliases {
+		if v, ok := p.Env[a.key]; ok && v != "" {
+			fmt.Fprintf(os.Stderr, "  %-8s → %s\n", a.label, v)
+		}
+	}
+
+	fmt.Fprintln(os.Stderr)
 }
 
 func prompt(reader *bufio.Reader, label string) string {
