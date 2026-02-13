@@ -1,3 +1,6 @@
+// Package config provides configuration management for switcher.
+// It handles reading/writing the ~/.switcher.json config file
+// and managing AI provider settings.
 package config
 
 import (
@@ -7,6 +10,8 @@ import (
 	"path/filepath"
 )
 
+// Provider represents an AI provider configuration.
+// It stores the base URL, API key, default model, and any additional environment variables.
 type Provider struct {
 	Description string            `json:"description"`
 	BaseURL     string            `json:"base_url"`
@@ -15,10 +20,13 @@ type Provider struct {
 	Env         map[string]string `json:"env"`
 }
 
+// Config represents the complete switcher configuration.
+// It maps provider names to their Provider configurations.
 type Config struct {
 	Providers map[string]Provider `json:"providers"`
 }
 
+// ConfigPath returns the path to the switcher configuration file (~/.switcher.json).
 func ConfigPath() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -69,6 +77,8 @@ func defaultConfig() Config {
 	}
 }
 
+// Init creates a config file with default providers if it doesn't already exist.
+// Returns the config file path, a bool indicating if it was created, and any error.
 func Init() (string, bool, error) {
 	path, err := ConfigPath()
 	if err != nil {
@@ -87,6 +97,8 @@ func Init() (string, bool, error) {
 	return path, true, nil
 }
 
+// Load reads and parses the config file from ~/.switcher.json.
+// If the file doesn't exist, it creates one with default providers.
 func Load() (Config, error) {
 	path, err := ConfigPath()
 	if err != nil {
@@ -117,6 +129,7 @@ func Load() (Config, error) {
 	return cfg, nil
 }
 
+// Save writes the config to ~/.switcher.json as formatted JSON.
 func Save(cfg Config) error {
 	path, err := ConfigPath()
 	if err != nil {
@@ -135,15 +148,20 @@ func Save(cfg Config) error {
 	return nil
 }
 
+// Get retrieves a provider by name.
+// Returns the provider and a bool indicating if it exists.
 func (c *Config) Get(name string) (Provider, bool) {
 	p, ok := c.Providers[name]
 	return p, ok
 }
 
+// Add inserts or updates a provider in the config.
 func (c *Config) Add(name string, p Provider) {
 	c.Providers[name] = p
 }
 
+// Remove deletes a provider from the config.
+// Returns true if the provider was found and deleted, false otherwise.
 func (c *Config) Remove(name string) bool {
 	if _, ok := c.Providers[name]; !ok {
 		return false
@@ -152,10 +170,13 @@ func (c *Config) Remove(name string) bool {
 	return true
 }
 
+// List returns all configured providers.
 func (c *Config) List() map[string]Provider {
 	return c.Providers
 }
 
+// DefaultProvider returns a built-in default provider by name.
+// Returns the provider and a bool indicating if it exists.
 func DefaultProvider(name string) (Provider, bool) {
 	defaults := defaultConfig()
 	p, ok := defaults.Providers[name]

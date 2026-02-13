@@ -1,3 +1,5 @@
+// Package cli provides command-line interface functionality for switcher.
+// It handles parsing commands and dispatching them to appropriate handlers.
 package cli
 
 import (
@@ -15,6 +17,8 @@ import (
 	"github.com/lucas-stellet/switcher/internal/updater"
 )
 
+// Run processes command-line arguments and executes the appropriate command.
+// It is the main entry point for the CLI dispatcher.
 func Run(args []string, version string) error {
 	if len(args) == 0 {
 		printUsage()
