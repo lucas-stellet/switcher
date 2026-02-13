@@ -58,6 +58,13 @@ func defaultConfig() Config {
 				Model:       "deepseek-chat",
 				Env:         map[string]string{},
 			},
+			"minimax": {
+				Description: "MiniMax",
+				BaseURL:     "https://api.minimax.io/anthropic",
+				APIKey:      "",
+				Model:       "MiniMax-M2.5",
+				Env:         map[string]string{},
+			},
 		},
 	}
 }
