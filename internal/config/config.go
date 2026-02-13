@@ -87,6 +87,8 @@ func Init() (string, bool, error) {
 
 	if _, err := os.Stat(path); err == nil {
 		return path, false, nil
+	} else if !os.IsNotExist(err) {
+		return "", false, fmt.Errorf("checking config file: %w", err)
 	}
 
 	cfg := defaultConfig()
