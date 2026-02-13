@@ -12,12 +12,19 @@ import (
 
 	"github.com/lucas-stellet/switcher/internal/config"
 	"github.com/lucas-stellet/switcher/internal/runner"
+	"github.com/lucas-stellet/switcher/internal/updater"
 )
 
-func Run(args []string) error {
+func Run(args []string, version string) error {
 	if len(args) == 0 {
 		printUsage()
 		return nil
+	}
+
+	if args[0] != "update" {
+		if msg := updater.CheckForUpdate(version); msg != "" {
+			fmt.Fprintln(os.Stderr, msg)
+		}
 	}
 
 	switch args[0] {
@@ -44,6 +51,11 @@ func Run(args []string) error {
 			return fmt.Errorf("usage: switcher edit <name>")
 		}
 		return cmdEdit(args[1])
+	case "update":
+		return updater.SelfUpdate(version)
+	case "version", "--version", "-v":
+		fmt.Printf("switcher %s\n", version)
+		return nil
 	case "help", "--help", "-h":
 		printUsage()
 		return nil
@@ -62,6 +74,8 @@ Usage:
   switcher add <name>                    Add a provider interactively
   switcher remove <name>                 Remove a provider
   switcher edit <name>                   Edit a provider in $EDITOR
+  switcher update                        Update switcher to the latest version
+  switcher version                       Print current version
 
 Examples:
   switcher moonshot claude --dangerously-skip-permissions
