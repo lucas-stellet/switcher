@@ -188,10 +188,25 @@ func cmdAdd(name string) error {
 
 	fmt.Printf("Adding provider %q\n\n", name)
 
-	description := prompt(reader, "Description: ")
-	baseURL := prompt(reader, "Base URL: ")
-	apiKey := prompt(reader, "API Key: ")
-	model := prompt(reader, "Model: ")
+	description, err := prompt(reader, "Description: ")
+	if err != nil {
+		return err
+	}
+
+	baseURL, err := prompt(reader, "Base URL: ")
+	if err != nil {
+		return err
+	}
+
+	apiKey, err := prompt(reader, "API Key: ")
+	if err != nil {
+		return err
+	}
+
+	model, err := prompt(reader, "Model: ")
+	if err != nil {
+		return err
+	}
 
 	p := config.Provider{
 		Description: description,
@@ -343,8 +358,11 @@ func printLaunchInfo(name string, p config.Provider) {
 	fmt.Fprintln(os.Stderr)
 }
 
-func prompt(reader *bufio.Reader, label string) string {
+func prompt(reader *bufio.Reader, label string) (string, error) {
 	fmt.Print(label)
-	line, _ := reader.ReadString('\n')
-	return strings.TrimSpace(line)
+	line, err := reader.ReadString('\n')
+	if err != nil {
+		return "", fmt.Errorf("reading input: %w", err)
+	}
+	return strings.TrimSpace(line), nil
 }
