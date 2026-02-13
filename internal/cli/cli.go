@@ -21,6 +21,8 @@ func Run(args []string) error {
 	}
 
 	switch args[0] {
+	case "init":
+		return cmdInit()
 	case "list", "ls":
 		return cmdList()
 	case "add":
@@ -50,6 +52,7 @@ func printUsage() {
 	fmt.Print(`switcher - launch Claude Code with different AI providers
 
 Usage:
+  switcher init                          Create config with default providers
   switcher <provider> claude [args...]   Launch Claude with a provider
   switcher list                          List configured providers
   switcher add <name>                    Add a provider interactively
@@ -61,6 +64,22 @@ Examples:
   switcher zai claude -p "hello world"
   switcher openrouter claude
 `)
+}
+
+func cmdInit() error {
+	path, created, err := config.Init()
+	if err != nil {
+		return err
+	}
+
+	if !created {
+		fmt.Printf("Config already exists at %s\n", path)
+		return nil
+	}
+
+	fmt.Printf("Config created at %s\n", path)
+	fmt.Println("Use 'switcher edit <provider>' to set your API keys.")
+	return nil
 }
 
 func cmdList() error {

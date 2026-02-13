@@ -19,7 +19,7 @@ type Config struct {
 	Providers map[string]Provider `json:"providers"`
 }
 
-func configPath() (string, error) {
+func ConfigPath() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("cannot determine home directory: %w", err)
@@ -69,8 +69,26 @@ func defaultConfig() Config {
 	}
 }
 
+func Init() (string, bool, error) {
+	path, err := ConfigPath()
+	if err != nil {
+		return "", false, err
+	}
+
+	if _, err := os.Stat(path); err == nil {
+		return path, false, nil
+	}
+
+	cfg := defaultConfig()
+	if err := Save(cfg); err != nil {
+		return "", false, fmt.Errorf("creating config: %w", err)
+	}
+
+	return path, true, nil
+}
+
 func Load() (Config, error) {
-	path, err := configPath()
+	path, err := ConfigPath()
 	if err != nil {
 		return Config{}, err
 	}
@@ -100,7 +118,7 @@ func Load() (Config, error) {
 }
 
 func Save(cfg Config) error {
-	path, err := configPath()
+	path, err := ConfigPath()
 	if err != nil {
 		return err
 	}
