@@ -4,7 +4,7 @@ A CLI tool to launch [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
 
 ## Why?
 
-Claude Code is an excellent coding agent, but it's locked to Anthropic's API by default. Several providers now offer OpenAI-compatible endpoints that can work as drop-in replacements — Moonshot, DeepSeek, OpenRouter, ZhipuAI, and others.
+Claude Code is an excellent coding agent, but it's locked to Anthropic's API by default. Several providers now offer OpenAI-compatible endpoints that can work as drop-in replacements — Moonshot, DeepSeek, OpenRouter, ZhipuAI, MiniMax, and others.
 
 Switching between them manually means juggling environment variables every time: `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, model flags... It gets old fast.
 
@@ -72,6 +72,7 @@ switcher list
 
 ```
   deepseek       - DeepSeek [deepseek-chat]  (no api key)
+  minimax        - MiniMax [MiniMax-M2.5]  (no api key)
   moonshot       - Moonshot AI [kimi-k2.5]  (no api key)
   openrouter     - OpenRouter  (no api key)
   zai            - ZhipuAI [glm-5]  (no api key)
@@ -135,6 +136,7 @@ Example:
 | `zai`        | ZhipuAI (Z.AI)     | `glm-5`          | 744B MoE, 40B active params, open-source, trained on Huawei Ascend |
 | `openrouter` | OpenRouter          | (user's choice)   | Gateway to 400+ models from all major providers                    |
 | `deepseek`   | DeepSeek            | `deepseek-chat`   | Points to latest stable (currently V4), strong reasoning & coding  |
+| `minimax`    | MiniMax             | `MiniMax-M2.5`   | Anthropic-compatible API, tool use, interleaved thinking           |
 
 ## How it works
 
