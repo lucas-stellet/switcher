@@ -155,3 +155,9 @@ func (c *Config) Remove(name string) bool {
 func (c *Config) List() map[string]Provider {
 	return c.Providers
 }
+
+func DefaultProvider(name string) (Provider, bool) {
+	defaults := defaultConfig()
+	p, ok := defaults.Providers[name]
+	return p, ok
+}

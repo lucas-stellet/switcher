@@ -182,7 +182,16 @@ func cmdEdit(name string) error {
 
 	p, ok := cfg.Get(name)
 	if !ok {
-		return fmt.Errorf("provider %q not found", name)
+		dp, isDefault := config.DefaultProvider(name)
+		if !isDefault {
+			return fmt.Errorf("provider %q not found", name)
+		}
+		p = dp
+		cfg.Add(name, p)
+		if err := config.Save(cfg); err != nil {
+			return err
+		}
+		fmt.Printf("Provider %q added from defaults.\n", name)
 	}
 
 	data, err := json.MarshalIndent(p, "", "  ")

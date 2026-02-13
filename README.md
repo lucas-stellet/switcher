@@ -56,9 +56,18 @@ switcher <provider> claude [args...]
 
 On first run, switcher creates `~/.switcher.json` with a set of pre-configured providers (API keys left blank for you to fill in).
 
+### Initialize config
+
+```sh
+switcher init
+```
+
+Creates `~/.switcher.json` with all default providers. Safe to run if the file already exists — it won't overwrite your config.
+
 ### Launch Claude with a provider
 
 ```sh
+switcher minimax claude
 switcher moonshot claude
 switcher deepseek claude -p "explain this function"
 switcher openrouter claude --dangerously-skip-permissions
