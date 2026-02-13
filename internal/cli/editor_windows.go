@@ -13,7 +13,7 @@ func defaultEditor() string {
 	if editor := os.Getenv("EDITOR"); editor != "" {
 		return editor
 	}
-	if path, err := exec.LookPath("code"); err == nil && path != "" {
+	if _, err := exec.LookPath("code"); err == nil {
 		return "code --wait"
 	}
 	return "notepad"

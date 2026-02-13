@@ -6,6 +6,7 @@ package runner
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/lucas-stellet/switcher/internal/config"
 )
@@ -40,7 +41,7 @@ func Run(provider config.Provider, claudeArgs []string) error {
 func removeEnv(env []string, key string) []string {
 	prefix := key + "="
 	for i, e := range env {
-		if len(e) >= len(prefix) && e[:len(prefix)] == prefix {
+		if strings.HasPrefix(e, prefix) {
 			return append(env[:i], env[i+1:]...)
 		}
 	}
@@ -52,7 +53,7 @@ func removeEnv(env []string, key string) []string {
 func setEnv(env []string, key, value string) []string {
 	prefix := key + "="
 	for i, e := range env {
-		if len(e) >= len(prefix) && e[:len(prefix)] == prefix {
+		if strings.HasPrefix(e, prefix) {
 			env[i] = prefix + value
 			return env
 		}
