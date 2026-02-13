@@ -5,7 +5,7 @@ set -e
 # Usage: curl -sSL https://raw.githubusercontent.com/lucas-stellet/switcher/main/install.sh | sh
 
 REPO="lucas-stellet/switcher"
-INSTALL_DIR="/usr/local/bin"
+INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 BINARY_NAME="switcher"
 
 # Detect OS
@@ -69,17 +69,24 @@ main() {
     curl -sSL "${DOWNLOAD_URL}" | tar xz -C "${TMP_DIR}"
 
     # Install binary
-    if [ -w "${INSTALL_DIR}" ]; then
-        mv "${TMP_DIR}/${BINARY_NAME}" "${INSTALL_DIR}/"
-    else
-        echo "Need sudo to install to ${INSTALL_DIR}"
-        sudo mv "${TMP_DIR}/${BINARY_NAME}" "${INSTALL_DIR}/"
-    fi
-
-    chmod +x "${INSTALL_DIR}/${BINARY_NAME}"
+    mkdir -p "${INSTALL_DIR}"
+    install -m 755 "${TMP_DIR}/${BINARY_NAME}" "${INSTALL_DIR}/${BINARY_NAME}"
 
     echo ""
     echo "Successfully installed ${BINARY_NAME} ${VERSION} to ${INSTALL_DIR}/${BINARY_NAME}"
+
+    # Warn if INSTALL_DIR is not in PATH
+    case ":${PATH}:" in
+        *":${INSTALL_DIR}:"*) ;;
+        *)
+            echo ""
+            echo "WARNING: ${INSTALL_DIR} is not in your PATH."
+            echo "Add it by appending this line to your shell profile (~/.bashrc, ~/.zshrc, etc.):"
+            echo ""
+            echo "  export PATH=\"${INSTALL_DIR}:\$PATH\""
+            ;;
+    esac
+
     echo ""
     echo "Run 'switcher --help' to get started"
 }

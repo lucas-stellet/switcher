@@ -45,7 +45,7 @@ go install github.com/lucas-stellet/switcher@latest
 ```sh
 git clone https://github.com/lucas-stellet/switcher.git
 cd switcher
-make install
+make install   # installs to ~/.local/bin (no sudo required)
 ```
 
 ## Usage

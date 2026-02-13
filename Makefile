@@ -1,14 +1,15 @@
-PREFIX ?= /usr/local/bin
+PREFIX ?= $(HOME)/.local/bin
 BINARY  = switcher
 
 build:
 	go build -o $(BINARY) .
 
 install: build
-	sudo install -m 755 $(BINARY) $(PREFIX)/$(BINARY)
+	mkdir -p $(PREFIX)
+	install -m 755 $(BINARY) $(PREFIX)/$(BINARY)
 
 uninstall:
-	sudo rm -f $(PREFIX)/$(BINARY)
+	rm -f $(PREFIX)/$(BINARY)
 
 clean:
 	rm -f $(BINARY)
