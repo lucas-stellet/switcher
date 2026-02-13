@@ -22,6 +22,10 @@ func Run(args []string) error {
 
 	switch args[0] {
 	case "init":
+		if hasHelpFlag(args[1:]) {
+			printInitHelp()
+			return nil
+		}
 		return cmdInit()
 	case "list", "ls":
 		return cmdList()
@@ -63,6 +67,38 @@ Examples:
   switcher moonshot claude --dangerously-skip-permissions
   switcher zai claude -p "hello world"
   switcher openrouter claude
+`)
+}
+
+func hasHelpFlag(args []string) bool {
+	for _, a := range args {
+		if a == "--help" || a == "-h" {
+			return true
+		}
+	}
+	return false
+}
+
+func printInitHelp() {
+	fmt.Print(`switcher init - create config file with default providers
+
+Usage:
+  switcher init
+
+Creates ~/.switcher.json with all built-in providers pre-configured
+(API keys left blank for you to fill in).
+
+If the config file already exists, it is not modified.
+
+Default providers included:
+  deepseek       DeepSeek            [deepseek-chat]
+  minimax        MiniMax             [MiniMax-M2.5]
+  moonshot       Moonshot AI         [kimi-k2.5]
+  openrouter     OpenRouter
+  zai            ZhipuAI             [glm-5]
+
+After running init, set your API keys with:
+  switcher edit <provider>
 `)
 }
 
