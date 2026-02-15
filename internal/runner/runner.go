@@ -6,6 +6,7 @@ package runner
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/lucas-stellet/switcher/internal/config"
@@ -34,6 +35,25 @@ func Run(provider config.Provider, claudeArgs []string) error {
 	args = append(args, claudeArgs...)
 
 	return execClaude(claudePath, args, env)
+}
+
+// RunCommand runs an arbitrary command with the given provider's environment variables.
+// It uses exec.Command to run the command as a subprocess, passing through stdin/stdout/stderr.
+func RunCommand(provider config.Provider, cmdName string, cmdArgs []string) error {
+	env := os.Environ()
+	env = setEnv(env, "ANTHROPIC_BASE_URL", provider.BaseURL)
+	env = removeEnv(env, "ANTHROPIC_API_KEY")
+	env = setEnv(env, "ANTHROPIC_AUTH_TOKEN", provider.APIKey)
+	for k, v := range provider.Env {
+		env = setEnv(env, k, v)
+	}
+
+	cmd := exec.Command(cmdName, cmdArgs...)
+	cmd.Env = env
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 // removeEnv removes an environment variable from the env list.

@@ -55,6 +55,8 @@ func Run(args []string, version string) error {
 			return fmt.Errorf("usage: switcher edit <name>")
 		}
 		return cmdEdit(args[1])
+	case "run":
+		return cmdRunCommand(args[1:])
 	case "update":
 		return updater.SelfUpdate(version)
 	case "version", "--version", "-v":
@@ -74,6 +76,7 @@ func printUsage() {
 Usage:
   switcher init                          Create config with default providers
   switcher <provider> claude [args...]   Launch Claude with a provider
+  switcher run <provider> -- <cmd>        Run command with provider's env vars
   switcher list                          List configured providers
   switcher add <name>                    Add a provider interactively
   switcher remove <name>                 Remove a provider
@@ -85,6 +88,7 @@ Examples:
   switcher moonshot claude --dangerously-skip-permissions
   switcher zai claude -p "hello world"
   switcher openrouter claude
+  switcher deepseek -- env | grep ANTHROPIC
 `)
 }
 
@@ -332,6 +336,48 @@ func cmdRun(args []string) error {
 	printLaunchInfo(providerName, p)
 
 	return runner.Run(p, claudeArgs)
+}
+
+func cmdRunCommand(args []string) error {
+	// Find the -- separator
+	sepIdx := -1
+	for i, arg := range args {
+		if arg == "--" {
+			sepIdx = i
+			break
+		}
+	}
+
+	if sepIdx == -1 {
+		return fmt.Errorf("missing '--' separator. Usage: switcher run <provider> -- <command> [args...]")
+	}
+
+	if sepIdx == len(args)-1 {
+		return fmt.Errorf("no command specified after '--'. Usage: switcher run <provider> -- <command> [args...]")
+	}
+
+	providerName := args[:sepIdx][0]
+	commandArgs := args[sepIdx+1:]
+	cmdName := commandArgs[0]
+	cmdArgs := commandArgs[1:]
+
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
+
+	p, ok := cfg.Get(providerName)
+	if !ok {
+		return fmt.Errorf("unknown provider %q. Use 'switcher list' to see available providers", providerName)
+	}
+
+	if p.APIKey == "" {
+		return fmt.Errorf("provider %q has no API key configured. Use 'switcher edit %s' to set one", providerName, providerName)
+	}
+
+	printLaunchInfo(providerName, p)
+
+	return runner.RunCommand(p, cmdName, cmdArgs)
 }
 
 func printLaunchInfo(name string, p config.Provider) {
