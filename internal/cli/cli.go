@@ -55,6 +55,11 @@ func Run(args []string, version string) error {
 			return fmt.Errorf("usage: switcher edit <name>")
 		}
 		return cmdEdit(args[1])
+	case "model":
+		if len(args) < 2 {
+			return fmt.Errorf("usage: switcher model <name>")
+		}
+		return cmdModel(args[1])
 	case "run":
 		return cmdRunCommand(args[1:])
 	case "update":
@@ -81,6 +86,7 @@ Usage:
   switcher add <name>                    Add a provider interactively
   switcher remove <name>                 Remove a provider
   switcher edit <name>                   Edit a provider in $EDITOR
+  switcher model <name>                  Show configured model for a provider
   switcher update                        Update switcher to the latest version
   switcher version                       Print current version
 
@@ -307,6 +313,25 @@ func cmdEdit(name string) error {
 	}
 
 	fmt.Printf("Provider %q updated.\n", name)
+	return nil
+}
+
+func cmdModel(name string) error {
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
+
+	p, ok := cfg.Get(name)
+	if !ok {
+		return fmt.Errorf("unknown provider %q. Use 'switcher list' to see available providers", name)
+	}
+
+	if p.Model == "" {
+		return fmt.Errorf("provider %q has no model configured", name)
+	}
+
+	fmt.Println(p.Model)
 	return nil
 }
 
