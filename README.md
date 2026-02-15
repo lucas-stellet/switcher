@@ -73,6 +73,15 @@ switcher deepseek claude -p "explain this function"
 switcher openrouter claude --dangerously-skip-permissions
 ```
 
+### Run arbitrary commands with provider env vars
+
+```sh
+switcher run moonshot -- env | grep ANTHROPIC
+switcher run deepseek -- ./test-e2e.sh
+```
+
+The `--` separator is required. Everything after `--` is passed to the command. This is useful for running E2E test scripts that need specific `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` settings.
+
 ### List providers
 
 ```sh
