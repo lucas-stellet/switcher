@@ -27,6 +27,8 @@ func Run(provider config.Provider, claudeArgs []string) error {
 	for k, v := range provider.Env {
 		env = setEnv(env, k, v)
 	}
+	env = removeEnv(env, "CLAUDECODE")
+	env = removeEnv(env, "CLAUDE_CODE")
 
 	args := []string{"claude"}
 	if provider.Model != "" {
@@ -47,6 +49,8 @@ func RunCommand(provider config.Provider, cmdName string, cmdArgs []string) erro
 	for k, v := range provider.Env {
 		env = setEnv(env, k, v)
 	}
+	env = removeEnv(env, "CLAUDECODE")
+	env = removeEnv(env, "CLAUDE_CODE")
 
 	cmd := exec.Command(cmdName, cmdArgs...)
 	cmd.Env = env
