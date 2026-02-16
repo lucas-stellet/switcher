@@ -1,0 +1,107 @@
+# Oh My Zsh plugin for switcher - launch Claude Code with different AI providers
+# https://github.com/lucas-stellet/switcher
+#
+# Install:
+#   Clone or symlink this directory to ~/.oh-my-zsh/custom/plugins/switcher
+#   Then add "switcher" to the plugins array in ~/.zshrc:
+#     plugins=(... switcher)
+
+# --- Completion ---
+
+__switcher_providers() {
+  local config_file="$HOME/.switcher.json"
+  [[ -f "$config_file" ]] || return
+
+  local -a providers
+  local name desc
+  while IFS= read -r line; do
+    if [[ "$line" =~ '^ *"([^"]+)" *: *\{' ]]; then
+      name="${match[1]}"
+      desc=""
+    elif [[ -n "$name" && "$line" =~ '^ *"description" *: *"([^"]*)"' ]]; then
+      desc="${match[1]}"
+    elif [[ -n "$name" && "$line" =~ '^ *\}' ]]; then
+      if [[ -n "$desc" ]]; then
+        providers+=("${name}:${desc}")
+      else
+        providers+=("${name}")
+      fi
+      name=""
+    fi
+  done < "$config_file"
+
+  compadd -X 'provider' -- "${(@)providers%%:*}"
+}
+
+_switcher() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    '1: :->first_arg' \
+    '*:: :->rest' && return
+
+  case $state in
+    first_arg)
+      local -a commands
+      commands=(
+        'init:Create config file with default providers'
+        'list:List configured providers'
+        'ls:List configured providers'
+        'add:Add a provider interactively'
+        'remove:Remove a provider'
+        'rm:Remove a provider'
+        'edit:Edit a provider in $EDITOR'
+        'model:Show configured model for a provider'
+        'run:Run command with provider env vars'
+        'update:Update switcher to the latest version'
+        'version:Print current version'
+        'help:Show usage information'
+      )
+
+      _describe 'command' commands -- || __switcher_providers
+      ;;
+
+    rest)
+      case $line[1] in
+        add|remove|rm|edit|model)
+          __switcher_providers
+          ;;
+        run)
+          if (( CURRENT == 2 )); then
+            __switcher_providers
+          elif (( CURRENT == 3 )); then
+            compadd -- '--'
+          else
+            _command_names -e
+          fi
+          ;;
+        init|list|ls|update|version|help)
+          ;;
+        *)
+          _files
+          ;;
+      esac
+      ;;
+  esac
+}
+
+compdef _switcher switcher
+
+# --- Aliases ---
+
+alias sw='switcher'
+alias swl='switcher list'
+alias swe='switcher edit'
+
+# --- Helper functions ---
+
+# Quick launch: swp <provider> [claude args...]
+swp() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: swp <provider> [args...]"
+    switcher list
+    return 1
+  fi
+  switcher "$@"
+}
