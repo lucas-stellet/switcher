@@ -47,10 +47,12 @@ func defaultConfig() Config {
 			},
 			"zai": {
 				Description: "ZhipuAI",
-				BaseURL:     "https://open.bigmodel.cn/api/paas/v4",
-				APIKey:      "",
+				BaseURL:     "https://api.z.ai/api/anthropic",
+				APIKey:      "your_zai_api_key",
 				Model:       "glm-5",
-				Env:         map[string]string{},
+				Env: map[string]string{
+					"API_TIMEOUT_MS": "3000000",
+				},
 			},
 			"openrouter": {
 				Description: "OpenRouter",
