@@ -130,6 +130,8 @@ The config file lives at `~/.switcher.json`. You can edit it directly or use the
 | `model`       | Default model to use                     |
 | `env`         | Extra environment variables to set       |
 
+> **Note:** Variables in `env` are applied _after_ `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN`. This means if you set either of these inside `env`, they will override the corresponding `base_url` and `api_key` fields. If a provider's default URL has changed, PRs are welcome.
+
 Example:
 
 ```json
@@ -137,10 +139,17 @@ Example:
   "providers": {
     "moonshot": {
       "description": "Moonshot AI",
-      "base_url": "https://api.moonshot.cn/v1",
+      "base_url": "https://api.moonshot.ai/anthropic",
       "api_key": "sk-...",
       "model": "kimi-k2.5",
-      "env": {}
+      "env": {
+        "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+        "ANTHROPIC_SMALL_FAST_MODEL": "kimi-k2.5",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "kimi-k2.5",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "kimi-k2.5",
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": "kimi-k2.5",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "kimi-k2.5"
+      }
     }
   }
 }
@@ -150,11 +159,11 @@ Example:
 
 | Name         | Provider            | Model             | Notes                                                              |
 |--------------|---------------------|-------------------|--------------------------------------------------------------------|
-| `moonshot`   | Moonshot AI         | `kimi-k2.5`      | 1T MoE, 32B active params, multimodal vision, agentic subagents    |
+| `moonshot`   | Moonshot AI         | `kimi-k2.5`      | Anthropic-compatible API, includes subagent and model env vars     |
 | `zai`        | ZhipuAI (Z.AI)     | `glm-5`          | 744B MoE, 40B active params, open-source, trained on Huawei Ascend |
 | `openrouter` | OpenRouter          | (user's choice)   | Gateway to 400+ models from all major providers                    |
 | `deepseek`   | DeepSeek            | `deepseek-chat`   | Points to latest stable (currently V4), strong reasoning & coding  |
-| `minimax`    | MiniMax             | `MiniMax-M2.5`   | Anthropic-compatible API, tool use, interleaved thinking           |
+| `minimax`    | MiniMax             | `MiniMax-M2.5`   | Anthropic-compatible API, includes model env vars for all tiers    |
 
 ## How it works
 
