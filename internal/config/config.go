@@ -38,43 +38,66 @@ func ConfigPath() (string, error) {
 func defaultConfig() Config {
 	return Config{
 		Providers: map[string]Provider{
-			"moonshot": {
-				Description: "Moonshot AI",
-				BaseURL:     "https://api.moonshot.cn/v1",
-				APIKey:      "",
-				Model:       "kimi-k2.5",
+
+			"deepseek": {
+				Description: "DeepSeek",
+				BaseURL:     "https://api.deepseek.com/v1",
+				APIKey:      "deepseek_api_key_here",
+				Model:       "deepseek-chat",
 				Env:         map[string]string{},
 			},
+
+            // https://platform.minimax.io/docs/coding-plan/claude-code
+            "minimax": {
+                Description: "MiniMax",
+                BaseURL:     "https://api.minimax.io/anthropic",
+                APIKey:      "minimax_api_key_here",
+                Model:       "MiniMax-M2.5",
+                Env:         map[string]string{
+                    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": 1,
+                    "ANTHROPIC_MODEL": "MiniMax-M2.5",
+                    "ANTHROPIC_SMALL_FAST_MODEL": "MiniMax-M2.5",
+                    "ANTHROPIC_DEFAULT_SONNET_MODEL": "MiniMax-M2.5",
+                    "ANTHROPIC_DEFAULT_OPUS_MODEL": "MiniMax-M2.5",
+                    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "MiniMax-M2.5"
+                },
+            },
+
+            // https://platform.moonshot.ai/docs/guide/agent-support#configure-environment-variables-1
+			"moonshot": {
+				Description: "Moonshot AI",
+				BaseURL:     "https://api.moonshot.ai/anthropic",
+				APIKey:      "moonshot_api_key_here",
+				Model:       "kimi-k2.5",
+				Env:         map[string]string{
+                    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": 1,
+                    "ANTHROPIC_SMALL_FAST_MODEL": "kimi-k2.5",
+                    "ANTHROPIC_DEFAULT_SONNET_MODEL": "kimi-k2.5",
+                    "ANTHROPIC_DEFAULT_OPUS_MODEL": "kimi-k2.5",
+                    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "kimi-k2.5",
+                    "CLAUDE_CODE_SUBAGENT_MODEL": "kimi-k2.5",
+				},
+			},
+
+			"openrouter": {
+				Description: "OpenRouter",
+				BaseURL:     "https://openrouter.ai/api/v1",
+				APIKey:      "openrouter_api_key_here",
+				Model:       "",
+				Env:         map[string]string{},
+			},
+
+            // https://docs.z.ai/devpack/tool/claude#manual-configuration
 			"zai": {
 				Description: "ZhipuAI",
 				BaseURL:     "https://api.z.ai/api/anthropic",
-				APIKey:      "your_zai_api_key",
+				APIKey:      "zai_api_key_here",
 				Model:       "glm-5",
 				Env: map[string]string{
 					"API_TIMEOUT_MS": "3000000",
 				},
 			},
-			"openrouter": {
-				Description: "OpenRouter",
-				BaseURL:     "https://openrouter.ai/api/v1",
-				APIKey:      "",
-				Model:       "",
-				Env:         map[string]string{},
-			},
-			"deepseek": {
-				Description: "DeepSeek",
-				BaseURL:     "https://api.deepseek.com/v1",
-				APIKey:      "",
-				Model:       "deepseek-chat",
-				Env:         map[string]string{},
-			},
-			"minimax": {
-				Description: "MiniMax",
-				BaseURL:     "https://api.minimax.io/anthropic",
-				APIKey:      "",
-				Model:       "MiniMax-M2.5",
-				Env:         map[string]string{},
-			},
+
 		},
 	}
 }
